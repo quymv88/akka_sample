@@ -24,7 +24,7 @@ public class AppLauncher {
                     ActorRef<Command> ref =
                             context.spawn(createCounter(0), "AnonymousActor");
 
-                    IntStream.range(0, 10).forEach(i -> ref.tell(new Command() {}));
+                    IntStream.range(0, 1000000).forEach(i -> ref.tell(new Command() {}));
 
                     return Behaviors.empty();
                 }), "SimpleRootActor");
