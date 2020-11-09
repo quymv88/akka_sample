@@ -30,6 +30,11 @@ public class AppLauncher {
                 }), "SimpleRootActor");
     }
 
+    /**
+     * Counter behavior factory
+     * @param value: current counter value
+     * @return an instance of counter behavior
+     */
     public static Behavior<Command> createCounter(int value) {
 
         return Behaviors.setup(context ->
