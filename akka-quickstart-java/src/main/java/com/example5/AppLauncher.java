@@ -6,6 +6,7 @@ import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.Behaviors;
 
 import java.time.Duration;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
 /**
@@ -21,6 +22,8 @@ public class AppLauncher {
 
         ActorSystem.create(
                 Behaviors.setup(context -> {
+
+                    context.getLog().info(String.valueOf("ForkJoinPool.commonPool().getParallelism(): " + ForkJoinPool.commonPool().getParallelism()));
 
                     ActorRef<FibonacciFactory.RequestActor> factory =
                             context.spawn(FibonacciFactory.create(), "FibonacciFactory");
