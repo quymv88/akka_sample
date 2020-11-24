@@ -1,6 +1,8 @@
 package com.example1;
 
+import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
+import akka.actor.typed.javadsl.Behaviors;
 
 /**
  * There are two flavors of the Actor APIs.
@@ -18,7 +20,13 @@ import akka.actor.typed.ActorSystem;
 public class AppLauncher {
 
     public static void main(String ... args) {
-        ActorSystem<SimpleBehavior.Command> system = ActorSystem.create(SimpleBehavior.create(), "SimpleBehavior");
-        system.tell(new SimpleBehavior.SayHello("QuyMV"));
+        //ActorSystem<SimpleBehavior.Command> system = ActorSystem.create(SimpleBehavior.create(), "SimpleBehavior");
+        //system.tell(new SimpleBehavior.SayHello("QuyMV"));
+        ActorSystem<SimpleBehavior.Command> system2 = ActorSystem.create(Behaviors.setup(context -> {
+            ActorRef<SimpleBehavior.Command> actorRef = context.spawn(SimpleBehavior.create(), "test");
+            actorRef.tell(new SimpleBehavior.SayHello("QuyMV"));
+            return Behaviors.empty();
+        }),"Root");
+
     }
 }

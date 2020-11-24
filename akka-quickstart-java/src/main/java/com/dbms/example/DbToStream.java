@@ -47,25 +47,6 @@ public class DbToStream {
                            accounts.stream().forEach(account -> {
                                System.out.println(account.getUserId() + "|" + account.getUserName());
                            });
-
-                           Source.from(accounts)
-                                   .runWith(
-                                           Slick.<Account>sink(
-                                                   session,
-                                                   5, //parallelism factor
-                                                   (account, connection) -> {
-                                                       PreparedStatement statement =
-                                                               connection.prepareStatement(
-                                                                       "Update accounts set email = ? where user_id = ?");
-                                                       statement.setString(1, account.getUserName() + "outlook.com");
-                                                       statement.setInt(2, account.getUserId());
-                                                       return statement;
-                                                   }),
-                                           materializer).whenComplete((done2, throwable1) -> {
-                                               if (throwable1 != null) {
-                                                   throwable1.printStackTrace();
-                                               }
-                           });
                        }
                     });
 

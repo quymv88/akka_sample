@@ -8,6 +8,9 @@ import akka.actor.typed.javadsl.Receive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.LongStream;
+
 public class SimpleBehavior extends AbstractBehavior<SimpleBehavior.Command> {
 
     /**
@@ -51,8 +54,18 @@ public class SimpleBehavior extends AbstractBehavior<SimpleBehavior.Command> {
     }
 
     private Behavior<Command> sayHello(SayHello message) {
+        getContext().getLog().info(getContext().getSystem().printTree());
         getContext().getLog().info("Welcome to Akka, {}!", message.getName());
-        return this;
+
+        CompletableFuture.runAsync(() -> {
+            System.out.println(Thread.currentThread());
+            LongStream.range(0, 100).forEach(System.out::println);
+        });
+
+        return Behaviors.stopped(() -> {
+            getContext().getLog().info(getContext().getSystem().printTree());
+            System.out.println("Stopped");
+        });
     }
 
 }
